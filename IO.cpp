@@ -25,7 +25,38 @@ void zad1()
     }
 }
 
+//Posortuj produkty od nadroższych do najtańszych
+void zad2()
+{
+    class Produkt
+    {
+    public:
+        std::string nazwa;
+        float cena;
+
+        Produkt(std::string _nazwa, float _cena)
+        {
+            this->nazwa = _nazwa;
+            this->cena = _cena;
+        }
+    };
+
+    std::vector<Produkt> produkty = 
+    {
+        Produkt("Name1", 3.33f),
+        Produkt("Name2", 1.33f),
+        Produkt("Name3", 2.33f),
+        Produkt("Name4", 4.33f),
+        Produkt("Name5", 5.33f),
+        Produkt("Name6", 6.33f),
+        Produkt("Name7", 7.33f),
+        Produkt("Name8", 8.33f),
+        Produkt("Name9", 9.33f),
+        Produkt("Name10", 10.33f)
+    };
+}
+
 int main()
 {
-
+    zad2();
 }
