@@ -1,0 +1,27 @@
+body{
+    background-color: gray;
+    font-family:'Times New Roman', Times, serif;
+	height: 100%;
+	width: 100%;
+}
+nav{
+    float: left;
+    height: 750px;
+	width: 10%;
+}
+header{
+    float: left;
+    height: 100%;
+	width: 90%;
+	text-align: center;
+}
+main{
+    float: left;
+    height: 300px;
+	width: 90%;
+}
+footer{
+    float: left;
+    text-align: center;
+	padding: 20px;
+}
