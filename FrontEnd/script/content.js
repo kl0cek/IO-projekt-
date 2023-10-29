@@ -8,6 +8,11 @@
         const response = await fetch("https://ioapi.azurewebsites.net/api/movies");
         const movies = await response.json();
 
+        if (response.status == 500) {
+            console.log(movies.message);
+            return;
+        }
+
         //Dla każdego obiektu w tablicy (w tym przypadku to filmy) dodaj h1 z nazwą filmu
         movies.forEach(async movie => {
             movieList.innerHTML += `<div class="movie"><h1>${movie.Title}</h1><div class="screening"></div></div>`;
