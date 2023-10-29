@@ -5,13 +5,7 @@
     <title>Admin Panel</title>
 </head>
 <body>
-    <div id="moviesList">
-        <div class="movieBox">
-            <h2>Title 1</h2>
-            <button>Edit screening</button>
-            <button>Delete</button>
-        </div>
-    </div>
+    <div id="moviesList"></div>
 </body>
 </html>
 
@@ -20,6 +14,19 @@
         const response = await fetch("http://localhost:8090/api/movies");
         const movies = await response.json();
         return movies;
+    }
+
+    const deleteMovie = async (movieID) =>
+    {
+        const response = await fetch(`http://localhost:8090/api/movies/${movieID}`, {
+            method: "DELETE",
+        })
+        const data = await response.json();
+        console.log(data);
+        if (response.status == 200) {
+            window.location.reload();
+        }
+        
     }
 
     document.addEventListener("DOMContentLoaded", async () =>
@@ -32,7 +39,7 @@
             <div class="movieBox">
                 <h2>${movie.Title}</h2>
                 <button>Edit screening</button>
-                <button>Delete</button>
+                <button onclick="deleteMovie(${movie.ID})">Delete</button>
             </div>`
         })
     })

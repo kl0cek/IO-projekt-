@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Ticket</title>
+</head>
+<body>
+    
+</body>
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () =>
+    {
+        const response = await fetch("http://localhost:8090/api/screenings", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({UserID: 1, Paid: 0, Active: 1})
+        })
+
+        const data = await response.json();
+        console.log(data)
+    })
+</script>

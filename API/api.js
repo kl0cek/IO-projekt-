@@ -51,6 +51,22 @@ router.route('/test/:id').get(async (request, response) => {
   console.log(data);
 })
 
+//
+
+router.route('/screenings').post(async (request, response) => {
+  let body = request.body;
+  console.log(body)
+  let pool = await sql.connect(config);
+  let data = await pool.request().input('UserID', body.UserID).input('Paid', body.Paid).input('Active', body.Active).execute('CreateReservation');
+  response.json({status: "OK"});
+})
+
+router.route('/movies/:id').delete(async (request, response) => {
+  let pool = await sql.connect(config);
+  let data = await pool.request().input('MovieID', request.params['id']).execute('DeleteMovie');
+  response.json({status: "OK"});
+})
+
 
 var port = process.env.PORT || 8090;
 app.listen(port);
