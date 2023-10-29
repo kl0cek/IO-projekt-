@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
 var router = express.Router();
-const fs = require('fs');
+let fs = require('fs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -20,10 +20,10 @@ router.use((request, response, next) => {
 router.route('/movies').get(async (request, response) => {
   try {
     let pool = await sql.connect(config);
-    let data = await pool.request().execute('GetMovies');
+    let data = await pool.request().execute('GetMovie');
     response.status(200).json(data.recordset);
   } catch (error) {
-    fs.appendFile('./log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    fs.appendFile('log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
     response.status(500).json({message: "Could not get movies list from database. Connect your server administrator"});
   }
 })
@@ -42,7 +42,7 @@ router.route('/screening/:id').get(async (request, response) => {
     let data = await pool.request().input('movieID', request.params['id']).execute('GetMovieScreening');
     response.status(200).json(data.recordset);
   } catch (error) {
-    fs.appendFile('./log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    fs.appendFile('log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
     response.status(500).json({message: "Could not get screening list from database. Connect your server administrator"});
     
   }
