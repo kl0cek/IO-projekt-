@@ -44,6 +44,7 @@ router.route('/screening/:id').get(async (request, response) => {
   } catch (error) {
     fs.appendFile('./log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
     response.status(500).json({message: "Could not get screening list from database. Connect your server administrator"});
+    
   }
 })
 
