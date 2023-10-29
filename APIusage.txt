@@ -1,0 +1,18 @@
+https://ioapi.azurewebsites.net/api/movies - pobiera wszystkie filmy z bazy danych
+np. 
+https://ioapi.azurewebsites.net/api/movies =
+[
+    {"ID":1,"Title":"FIlm1","Director":null},
+    {"ID":2,"Title":"Film2","Director":null},
+    {"ID":3,"Title":"FIlm3","Director":null}
+]
+
+
+
+https://ioapi.azurewebsites.net/api/screening/:MovieID - pobiera wszystkie daty z godziną wyświetlania dla filmu o podanym ID
+np.
+https://ioapi.azurewebsites.net/api/screening/1 = 
+[
+    {"ID":1,"RoomID":1,"ScreeningDate":"2023-10-26T18:00:00.000Z"},
+    {"ID":2,"RoomID":1,"ScreeningDate":"2023-10-26T21:30:00.000Z"}
+]
