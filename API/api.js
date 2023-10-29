@@ -5,10 +5,11 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
 var router = express.Router();
+const fs = require('fs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({origin: '*'}));
 app.use('/api', router);
 
 router.use((request, response, next) => {
@@ -25,6 +26,7 @@ router.route('/movies').get(async (request, response) => {
     response.json(data.recordset);
   } catch (error) {
     response.status(500).json(error);
+    fs.appendFile('log.txt', error.message);
   }
 })
 
@@ -47,6 +49,22 @@ router.route('/test/:id').get(async (request, response) => {
   let data = await pool.request().input('MovieID', request.params['id']).execute('test');
   response.json(data.recordsets);
   console.log(data);
+})
+
+//
+
+router.route('/screenings').post(async (request, response) => {
+  let body = request.body;
+  console.log(body)
+  let pool = await sql.connect(config);
+  let data = await pool.request().input('UserID', body.UserID).input('Paid', body.Paid).input('Active', body.Active).execute('CreateReservation');
+  response.json({status: "OK"});
+})
+
+router.route('/movies/:id').delete(async (request, response) => {
+  let pool = await sql.connect(config);
+  let data = await pool.request().input('MovieID', request.params['id']).execute('DeleteMovie');
+  response.json({status: "OK"});
 })
 
 

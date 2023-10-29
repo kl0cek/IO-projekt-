@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <div id="moviesList"></div>
+</body>
+</html>
+
+<script>
+    const getMovies = async () => {
+        const response = await fetch("http://localhost:8090/api/movies");
+        const movies = await response.json();
+        return movies;
+    }
+
+    const deleteMovie = async (movieID) =>
+    {
+        const response = await fetch(`http://localhost:8090/api/movies/${movieID}`, {
+            method: "DELETE",
+        })
+        const data = await response.json();
+        console.log(data);
+        if (response.status == 200) {
+            window.location.reload();
+        }
+        
+    }
+
+    document.addEventListener("DOMContentLoaded", async () =>
+    {
+        const moviesList = document.querySelector('#moviesList');
+        const movies = await getMovies();
+        movies.forEach(movie =>
+        {
+            moviesList.innerHTML += `
+            <div class="movieBox">
+                <h2>${movie.Title}</h2>
+                <button>Edit screening</button>
+                <button onclick="deleteMovie(${movie.ID})">Delete</button>
+            </div>`
+        })
+    })
+</script>
