@@ -13,7 +13,6 @@ app.use(cors({origin: '*'}));
 app.use('/api', router);
 
 router.use((request, response, next) => {
-    console.log('middleware');
     next();
 });
 
@@ -22,11 +21,10 @@ router.route('/movies').get(async (request, response) => {
   try {
     let pool = await sql.connect(config);
     let data = await pool.request().execute('GetMovies');
-    response.status(200);
-    response.json(data.recordset);
+    response.status(200).json(data.recordset);
   } catch (error) {
-    response.status(500).json(error);
-    fs.appendFile('log.txt', error.message);
+    fs.appendFile('./log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    response.status(500).json({message: "Could not get movies list from database. Connect your server administrator"});
   }
 })
 
@@ -39,9 +37,14 @@ router.route('/movies/:id').get(async (request, response) => {
 
 //Get movie screening
 router.route('/screening/:id').get(async (request, response) => {
-  let pool = await sql.connect(config);
-  let data = await pool.request().input('movieID', request.params['id']).execute('GetMovieScreening');
-  response.json(data.recordset);
+  try {
+    let pool = await sql.connect(config);
+    let data = await pool.request().input('movieID', request.params['id']).execute('GetMovieScreening');
+    response.status(200).json(data.recordset);
+  } catch (error) {
+    fs.appendFile('./log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    response.status(500).json({message: "Could not get screening list from database. Connect your server administrator"});
+  }
 })
 
 router.route('/test/:id').get(async (request, response) => {

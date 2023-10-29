@@ -11,8 +11,7 @@
 
 <script>
     const getMovies = async () => {
-        const response = await fetch("http://localhost:8090/api/movies");
-        const movies = await response.json();
+        
         return movies;
     }
 
@@ -22,9 +21,11 @@
             method: "DELETE",
         })
         const data = await response.json();
-        console.log(data);
         if (response.status == 200) {
             window.location.reload();
+        }
+        else if (response.status == 500) {
+            console.log(data);
         }
         
     }
@@ -32,15 +33,23 @@
     document.addEventListener("DOMContentLoaded", async () =>
     {
         const moviesList = document.querySelector('#moviesList');
-        const movies = await getMovies();
-        movies.forEach(movie =>
+        const response = await fetch("http://localhost:8090/api/movies");
+        const data = await response.json();
+        if (response.status == 200)
         {
-            moviesList.innerHTML += `
-            <div class="movieBox">
-                <h2>${movie.Title}</h2>
-                <button>Edit screening</button>
-                <button onclick="deleteMovie(${movie.ID})">Delete</button>
-            </div>`
-        })
+            data.forEach(movie => {
+                moviesList.innerHTML += `
+                <div class="movieBox">
+                    <h2>${movie.Title}</h2>
+                    <button>Edit screening</button>
+                    <button onclick="deleteMovie(${movie.ID})">Delete</button>
+                </div>`
+            })
+        }
+        else if (response.status == 500)
+        {
+            console.log(data);
+        }
+        
     })
 </script>
