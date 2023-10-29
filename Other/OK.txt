@@ -1,0 +1,5 @@
+Możliwość łatwiejszej i zautomatyzowanej księgowości dla administratora
+Funkcja pozwalająca na wyświetlanie dochodów i przychodów z wyświetlania danych filmów i/lub z konkretnego dnia.
+
+Możliwość zarządzania serwisem przez administratora jest konieczna do poprawnego działania serwisu
+Zarządzanie serwisem pozwala na zachowanie poprawności danych.
