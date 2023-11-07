@@ -20,7 +20,7 @@ router.use((request, response, next) => {
 router.route('/movies').get(async (request, response) => {
   try {
     let pool = await sql.connect(config);
-    let data = await pool.request().execute('GetMovie');
+    let data = await pool.request().execute('GetMovies');
     response.status(200).json(data.recordset);
   } catch (error) {
     fs.appendFile('log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
