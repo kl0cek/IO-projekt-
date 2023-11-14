@@ -10,11 +10,17 @@
 </html>
 
 <script>
+    const popUp = (message) =>
+    {
+
+    }
+
     const getMovies = async () => {
         
         return movies;
     }
 
+    //Function calling API to delete movie
     const deleteMovie = async (movieID) =>
     {
         const response = await fetch(`http://localhost:8090/api/movies/${movieID}`, {
@@ -22,14 +28,15 @@
         })
         const data = await response.json();
         if (response.status == 200) {
-            window.location.reload();
+            popUp(data.message);
         }
         else if (response.status == 500) {
-            console.log(data);
+            popUp(data.message);
         }
         
     }
 
+    //Get movies list on page load
     document.addEventListener("DOMContentLoaded", async () =>
     {
         const moviesList = document.querySelector('#moviesList');
@@ -48,8 +55,11 @@
         }
         else if (response.status == 500)
         {
-            console.log(data);
+            popUp(data.message);
         }
-        
     })
+
+
+
+
 </script>
