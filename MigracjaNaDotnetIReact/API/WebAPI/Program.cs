@@ -19,6 +19,19 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
 builder.Services.AddScoped<IScreeningService, ScreeningService>();
 
+builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+builder.Services.AddScoped<ITicketTypeService, TicketTypeService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+
+builder.Services.AddScoped<IReservationHistoryRepository, ReservationHistoryRepository>();
+builder.Services.AddScoped<IReservationHistoryService, ReservationHistoryService>();
+
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers().AddJsonOptions(options =>

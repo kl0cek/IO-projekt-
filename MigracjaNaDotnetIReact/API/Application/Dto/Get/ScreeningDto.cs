@@ -15,11 +15,13 @@ namespace Application.Dto.Get
         public uint ID { get; set; }
         public uint MovieID { get; set; }
         public uint RoomID { get; set; }
+        public string RoomName { get; set; } = string.Empty;
         public DateTime ScreeningDate { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Screening, ScreeningDto>();
+            profile.CreateMap<Screening, ScreeningDto>()
+                .ForMember(m => m.RoomName, c => c.MapFrom(s => s.Room.Name));
         }
     }
 }

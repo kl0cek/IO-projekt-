@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink, useNavigate } from 'react-router-dom';
 
 import Header from '../components/Header';
+import LoginBox from '../components/LoginBox';
 import SeatBox from '../components/SeatBox';
+import { useUser } from '../context/UserContext';
 
 const ScreeningDetails = () =>
 {
+    const navigation = useNavigate();
+    const {userData, setUser} = useUser();
     const { id } = useParams();
     const [data, setData] = useState(null);
+    const [ticketTypes, setTicketTypes] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showLoginBox, setShowLoginBox] = useState(false);
+    const [reservationDetails, setReservationDetails] = useState(null)
+    const [error, setError] = useState("Przynajmniej jedno miejsce musi być wybrane")
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:5000/api/screening/${id}`)
         .then(response => response.json())
         .then(data => {
             setData(data);
+            setReservationDetails({
+                movieTitle: data.movieTitle,
+                date: data.screeningDate,
+                roomName: data.roomName,
+                paid: false,
+                active: true,
+                screeningID: id,
+                seats: []
+            })
             setLoading(false);
         })
         .catch(error => {
@@ -22,11 +40,66 @@ const ScreeningDetails = () =>
             setLoading(false);
         });
     }, [id]);
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/api/tickettype`)
+        .then(response => response.json())
+        .then(data => {
+            setTicketTypes(data);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }, []);
+
+    useEffect(() => {
+        console.log(reservationDetails)
+    }, [reservationDetails]);
+
+    const addSeatDetails = (seatDetails) => {
+        setReservationDetails(prevState => ({
+            ...prevState,
+            seats: [
+                ...prevState.seats,
+                seatDetails
+            ]
+        }))
+    }
+
+    const deleteSeatDetails = (seatID) => {
+        let newArray = reservationDetails.seats.filter(seat => seat.seatID !== seatID);
+        setReservationDetails(prevState => ({
+            ...prevState,
+            seats: newArray
+        }))
+    }
+
+    const submit = () => {
+        //User does not choose seats
+        if (reservationDetails.seats.length <= 0) {
+            setShowError(true);
+            return;
+        }
+        //User not logged in
+        else if (userData === null) {
+            setShowError(false);
+            setShowLoginBox(true);
+            return;
+        }
+        navigation("/Summary", {state: {reservationDetails}});
+    }
     
+    //Dodać ScreeningDetailsBox
     return (
         <>
             <Header />
-            <div style={{width: '100%', padding: '0px', display: 'flex', justifyContent: 'center', color: 'black'}}>
+            
+            <div style={{width: '100%', padding: '0px', display: 'flex', alignItems: 'center', flexDirection: "column", color: 'black'}}>
+                {showError ? 
+                <div style={{width: "60%", maxWidth: "1000px", backgroundColor: "#E57373", border: "1px solid red", borderRadius: "5px", color: "white", textAlign: "center", padding: "10px 0px", marginTop: "40px"}}>
+                    {error}
+                </div>
+                : null}
                 <div style={{width: '100%',maxWidth: '1000px', height: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '40px'}}>
                     {loading ? (<p>loading...</p>) : 
                     <>
@@ -39,7 +112,7 @@ const ScreeningDetails = () =>
                             <div style={{display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '15px'}}>
                                 {
                                     data.seats.map(seat => (
-                                        <SeatBox number={seat.number} />
+                                        <SeatBox row={seat.row} number={seat.number} ID={seat.id} addSeat={addSeatDetails} deleteSeat={deleteSeatDetails} ticketTypes={ticketTypes}/>
                                     ))
                                 }
                             </div>
@@ -47,7 +120,14 @@ const ScreeningDetails = () =>
                     </>
                     }
                 </div>
+                <div style={{width: "1000px", marginTop: "30px", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+                <NavLink to={`/`}>
+                    <button style={{backgroundColor: "white", color: "orange", border: "1px solid orange", borderRadius: "15px", padding: '10px 30px', fontWeight: "600"}}>Wróć</button>
+                </NavLink>
+                <button onClick={submit} style={{backgroundColor: "orange", color: "white", border: "1px solid orange", borderRadius: "15px", padding: '10px 30px', fontWeight: "600"}}>Dalej</button>
+                </div>
             </div>
+            {showLoginBox ? <LoginBox /> : null}
         </>
     );
 }

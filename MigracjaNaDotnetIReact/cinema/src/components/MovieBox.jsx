@@ -17,7 +17,7 @@ const MovieBox = (props) =>
                 
                 <div style={{display: 'flex', alignItems: 'center', marginTop: '15px'}}>
                 {props.screenings.map(screening => (
-                    <ScreeningDateBox key={screening.id} screeningID={screening.id} date={screening.screeningDate}/>
+                    <ScreeningDateBox key={screening.id} screeningID={screening.id} roomName={screening.roomName} date={screening.screeningDate}/>
                 ))}
                 </div>
             </div>

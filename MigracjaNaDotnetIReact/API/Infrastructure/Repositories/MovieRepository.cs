@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
 
         public IEnumerable<Movie> GetAll()
         {
-            return _dbContext.Movies.Include(m => m.Screenings).ToList();
+            return _dbContext.Movies.Include(m => m.Screenings).ThenInclude(s => s.Room).ToList();
         }
 
         public Movie? GetById(int id)

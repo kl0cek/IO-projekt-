@@ -21,6 +21,6 @@ namespace Domain.Entities
         public virtual Seat? Seat { get; set; }
         public virtual Screening? Screening { get; set; }
         public virtual Reservation? Reservation { get; set; }
-        public virtual TicketType? TicketType { get; set; }
+        public virtual List<TicketType>? TicketType { get; set; }
     }
 }

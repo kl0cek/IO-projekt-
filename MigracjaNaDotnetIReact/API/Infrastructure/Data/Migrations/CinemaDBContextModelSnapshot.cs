@@ -77,6 +77,36 @@ namespace Infrastructure.Migrations
                     b.ToTable("Reservations");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ReservationHistory", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MovieName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Paid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RoomName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ReservationsHistory");
+                });
+
             modelBuilder.Entity("Domain.Entities.ReservedSeat", b =>
                 {
                     b.Property<long>("ScreeningID")
@@ -91,16 +121,47 @@ namespace Infrastructure.Migrations
                     b.Property<long>("TicketTypeID")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ScreeningID", "SeatID", "ReservationID", "TicketTypeID");
+                    b.HasKey("ScreeningID", "SeatID", "ReservationID");
 
                     b.HasIndex("ReservationID");
 
                     b.HasIndex("SeatID");
 
-                    b.HasIndex("TicketTypeID")
-                        .IsUnique();
-
                     b.ToTable("ReservedSeats");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ReservedSeatHistory", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<long>("ReservationHistoryID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SeatID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SeatNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SeatRow")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TicketType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ReservationHistoryID");
+
+                    b.ToTable("ReservedSeatsHistory");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
@@ -186,7 +247,18 @@ namespace Infrastructure.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
+                    b.Property<long?>("ReservedSeatReservationID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ReservedSeatScreeningID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ReservedSeatSeatID")
+                        .HasColumnType("bigint");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("ReservedSeatScreeningID", "ReservedSeatSeatID", "ReservedSeatReservationID");
 
                     b.ToTable("TicketTypes");
                 });
@@ -252,19 +324,20 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("SeatID")
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.TicketType", "TicketType")
-                        .WithOne("ReservedSeat")
-                        .HasForeignKey("Domain.Entities.ReservedSeat", "TicketTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Reservation");
 
                     b.Navigation("Screening");
 
                     b.Navigation("Seat");
+                });
 
-                    b.Navigation("TicketType");
+            modelBuilder.Entity("Domain.Entities.ReservedSeatHistory", b =>
+                {
+                    b.HasOne("Domain.Entities.ReservationHistory", null)
+                        .WithMany("ReservedSeatsHistory")
+                        .HasForeignKey("ReservationHistoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Screening", b =>
@@ -297,6 +370,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
+            modelBuilder.Entity("Domain.Entities.TicketType", b =>
+                {
+                    b.HasOne("Domain.Entities.ReservedSeat", "ReservedSeat")
+                        .WithMany("TicketType")
+                        .HasForeignKey("ReservedSeatScreeningID", "ReservedSeatSeatID", "ReservedSeatReservationID");
+
+                    b.Navigation("ReservedSeat");
+                });
+
             modelBuilder.Entity("Domain.Entities.Movie", b =>
                 {
                     b.Navigation("Screenings");
@@ -305,6 +387,16 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
                     b.Navigation("ReservedSeats");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ReservationHistory", b =>
+                {
+                    b.Navigation("ReservedSeatsHistory");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ReservedSeat", b =>
+                {
+                    b.Navigation("TicketType");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
@@ -317,11 +409,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Seat", b =>
                 {
                     b.Navigation("ReservedSeats");
-                });
-
-            modelBuilder.Entity("Domain.Entities.TicketType", b =>
-                {
-                    b.Navigation("ReservedSeat");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

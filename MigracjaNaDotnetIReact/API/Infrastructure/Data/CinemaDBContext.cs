@@ -20,6 +20,8 @@ namespace Infrastructure.Data
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ReservationHistory> ReservationsHistory { get; set; }
+        public DbSet<ReservedSeatHistory> ReservedSeatsHistory { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,8 +30,7 @@ namespace Infrastructure.Data
                 {
                     rs.ScreeningID,
                     rs.SeatID,
-                    rs.ReservationID,
-                    rs.TicketTypeID
+                    rs.ReservationID
                 });
 
             modelBuilder.Entity<ReservedSeat>()
