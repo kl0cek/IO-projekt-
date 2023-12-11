@@ -7,6 +7,7 @@ import FinalPage from './pages/FinalPage';
 import Repertoire from './pages/Repertoire';
 import ScreeningDetails from './pages/ScreeningDetails';
 import UserTickets from './pages/UserTickets';
+import AdminPanel from './pages/AdminPanel';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/Summary" element={<OrderSummary/>} />
           <Route path="/Final" element={<FinalPage/>}/>
           <Route path="/UserTickets" element={<UserTickets/>}/>
+          <Route path="/AdminPanel" element={<AdminPanel />}/>
         </Routes>
       </UserProvider>
       </>

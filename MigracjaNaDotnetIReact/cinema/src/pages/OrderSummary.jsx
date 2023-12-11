@@ -1,23 +1,87 @@
 import React, {useEffect, useState} from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useNavigate } from "react-router-dom";
+
 import Header from "../components/Header";
+import NavBar from "../components/NavBar";
+import { useUser } from "../context/UserContext";
+import TicketSeatBox from "../components/TicketSeatBox";
+
+import APIHandler from "../API/APIHandler";
 
 const OrderSummary = () => {
+    const {getUser} = useUser();
+    const navigation = useNavigate();
     const location = useLocation()
     const reservationDetails = location.state.reservationDetails;
-    const [sum, setSum] = useState(0);
 
-    useEffect(() => {
-        let priceSum = 0;
+    const createReservationBody = () => {
+        let reservedSeats = [];
         reservationDetails.seats.forEach(seat => {
-            priceSum += Number(seat.price);
+            reservedSeats.push({
+                    SeatID: seat.seatID, 
+                    ScreeningID: Number(reservationDetails.screeningID), 
+                    TicketTypeID: Number(seat.ticketType)
+                })
         })
-        setSum(priceSum);
-    }, []);
+
+        return {
+            UserID: getUser().id,
+            Paid: reservationDetails.paid,
+            Active: reservationDetails.active,
+            ReservedSeats: reservedSeats
+        }
+    }
+
+    const createHistoryBody = () => {
+        let reservedSeats = [];
+        reservationDetails.seats.forEach(seat => {
+            reservedSeats.push({
+                SeatID: seat.seatID, 
+                SeatNumber: seat.seatNumber, 
+                SeatRow: seat.seatRow, 
+                TicketType: seat.ticketTypeName, 
+                Price: Number(seat.price)
+            })
+        })
+
+        return {
+            UserID: getUser().id,
+            MovieName: reservationDetails.movieTitle,
+            RoomName: reservationDetails.roomName,
+            Paid: reservationDetails.paid,
+            Date: reservationDetails.date,
+            ReservedSeatsHistory: reservedSeats
+        }
+    }
+
+    const submit = () => {
+        postData();
+    }
+
+    const postData = async () => {
+        let result = await APIHandler.postReservation(createReservationBody());
+        if (result.status === 'success') {
+            result = await APIHandler.postHistory(createHistoryBody());
+            if (result.status === 'success') {
+                navigation("/Final");
+            }
+            else {
+                //HANDLE ERROR
+            }
+        }
+        else {
+            //HANDLE ERROR
+        }
+    }
+
+    const routeToReservationDetails = () => {
+        navigation(`/ScreeningDetails/${reservationDetails.screeningID}`);
+    }
     
     return(
         <>
             <Header />
+            <NavBar />
             <div style={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center"}}>
                 <div style={{width: "100%", maxWidth: "1000px", marginTop: "40px", display: "flex", flexDirection: "column"}}>
                     <div style={{width: "100%", display: "flex", justifyContent: "space-between"}}>
@@ -36,36 +100,11 @@ const OrderSummary = () => {
                     </div>
                     <div style={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center", marginTop: "30px"}}>
                         <h2>Miejsca</h2>
-                        <table style={{textAlign: "center", width: "60%", borderCollapse: "collapse"}}>
-                            <tr>
-                                <th style={{border: "1px solid black", padding: "10px 0px"}}>Rząd</th>
-                                <th style={{border: "1px solid black", padding: "10px 0px"}}>Miejsce</th>
-                                <th style={{border: "1px solid black", padding: "10px 0px"}}>Typ</th>
-                                <th style={{border: "1px solid black", padding: "10px 0px"}}>Cena</th>
-                            </tr>
-                            {reservationDetails.seats.map(seat => (
-                                <tr>
-                                    <td style={{border: "1px solid black", padding: "10px 0px"}}>{seat.seatRow}</td>
-                                    <td style={{border: "1px solid black", padding: "10px 0px"}}>{seat.seatNumber}</td>
-                                    <td style={{border: "1px solid black", padding: "10px 0px"}}>{seat.ticketTypeName}</td>
-                                    <td style={{border: "1px solid black", padding: "10px 0px"}}>{seat.price}zł</td>
-                                </tr>
-                            ))}
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style={{border: "1px solid black", padding: "10px 0px"}}><b>Razem: {sum.toFixed(2)}zł</b></td>
-                            </tr>
-                        </table>
+                        <TicketSeatBox seats={reservationDetails.seats}/>
                     </div>
                     <div style={{width: "1000px", marginTop: "40px", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-                        <NavLink to={`/ScreeningDetails/${reservationDetails.screeningID}`}>
-                            <button style={{backgroundColor: "white", color: "orange", border: "1px solid orange", borderRadius: "15px", padding: '10px 30px', fontWeight: "600"}}>Wróć</button>
-                        </NavLink>
-                        <NavLink to={`/Final`}>
-                            <button style={{backgroundColor: "orange", color: "white", border: "1px solid orange", borderRadius: "15px", padding: '10px 30px', fontWeight: "600"}}>Zapłać</button>
-                        </NavLink>
+                        <button onClick={routeToReservationDetails} style={{backgroundColor: "white", color: "orange", border: "1px solid orange", borderRadius: "15px", padding: '10px 30px', fontWeight: "600"}}>Wróć</button>
+                        <button onClick={submit} style={{backgroundColor: "orange", color: "white", border: "1px solid orange", borderRadius: "15px", padding: '10px 30px', fontWeight: "600"}}>Zapłać</button>
                     </div>
                 </div>
             </div>

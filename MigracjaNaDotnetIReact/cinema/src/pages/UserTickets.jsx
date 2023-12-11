@@ -1,8 +1,15 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import Header from "../components/Header"
+import NavBar from "../components/NavBar";
+import TicketList from "../components/TicketList";
 
 const UserTickets = () => {
     return(
-        <h1>User tickets</h1>
+        <>
+            <Header />
+            <NavBar />
+            <TicketList />
+        </>
     )
 }
 
