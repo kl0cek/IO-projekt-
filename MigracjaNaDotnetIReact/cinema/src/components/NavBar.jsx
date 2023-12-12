@@ -9,7 +9,7 @@ const NavBar = () => {
     }
 
     const routeToUserTickets = () => {
-        navigation("UserTickets")
+        navigation("/UserTickets")
     }
 
     const routeToAdminPanel = () => {

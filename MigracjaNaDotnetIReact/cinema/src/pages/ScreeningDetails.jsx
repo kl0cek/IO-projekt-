@@ -88,6 +88,11 @@ const ScreeningDetails = () =>
             setShowLoginBox(true);
             return;
         }
+        //navigation("/Summary", {state: {reservationDetails}});
+        routeToSummary();
+    }
+
+    const routeToSummary = () => {
         navigation("/Summary", {state: {reservationDetails}});
     }
 

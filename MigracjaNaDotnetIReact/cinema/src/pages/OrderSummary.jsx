@@ -58,12 +58,16 @@ const OrderSummary = () => {
         postData();
     }
 
+    const routeToFinal = () => {
+        navigation("Final")
+    }
+
     const postData = async () => {
         let result = await APIHandler.postReservation(createReservationBody());
         if (result.status === 'success') {
             result = await APIHandler.postHistory(createHistoryBody());
             if (result.status === 'success') {
-                navigation("/Final");
+                routeToFinal()
             }
             else {
                 //HANDLE ERROR
@@ -87,9 +91,9 @@ const OrderSummary = () => {
                     <div style={{width: "100%", display: "flex", justifyContent: "space-between"}}>
                         <div style={{display: "flex", flexDirection: "column"}}>
                             <h2>Dane użytkownika</h2>
-                            <p style={{margin: "5px 0px"}}><b>Imie:</b> Jakub</p>
-                            <p style={{margin: "5px 0px"}}><b>Nazwisko:</b> Latawiec</p>
-                            <p style={{margin: "5px 0px"}}><b>Email:</b> latawiec@student.agh.edu.pl</p>
+                            <p style={{margin: "5px 0px"}}><b>Imie:</b> {getUser().firstName}</p>
+                            <p style={{margin: "5px 0px"}}><b>Nazwisko:</b> {getUser().lastName}</p>
+                            <p style={{margin: "5px 0px"}}><b>Email:</b> {getUser().email}</p>
                         </div>
                         <div style={{display: "flex", flexDirection: "column", textAlign: "right"}}>
                             <h2>Dane filmu</h2>
