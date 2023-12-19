@@ -13,5 +13,6 @@ namespace Application.Interfaces
     {
         IEnumerable<ReservationHistoryDto>? GetUserReservationHistory(uint userID);
         ReservationHistory CreateReservation(CreateReservationHistoryDto dto);
+        bool DeleteReservation(uint id);
     }
 }

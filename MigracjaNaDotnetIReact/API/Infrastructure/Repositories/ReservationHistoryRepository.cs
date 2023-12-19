@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace Infrastructure.Repositories
 {
     public class ReservationHistoryRepository : IReservationHistoryRepository
+
     {
         private readonly CinemaDBContext _dbContext;
 
@@ -24,6 +25,17 @@ namespace Infrastructure.Repositories
             _dbContext.Add(reservationHistory);
             _dbContext.SaveChanges();
             return reservationHistory;
+        }
+
+        public bool Delete(uint id)
+        {
+            var history = _dbContext.ReservationsHistory.Where(rh => rh.ID == id).FirstOrDefault();
+
+            if (history == null) return false;
+
+            _dbContext.Remove(history);
+            _dbContext.SaveChanges();
+            return true;
         }
 
         public IEnumerable<ReservationHistory>? GetByUserID(uint userID)

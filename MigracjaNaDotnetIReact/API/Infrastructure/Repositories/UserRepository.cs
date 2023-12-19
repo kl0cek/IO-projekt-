@@ -19,7 +19,14 @@ namespace Infrastructure.Repositories
             _dbContext = context;
         }
 
-        public User? Get(string email)
+        public User Add(User user)
+        {
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+            return user;
+        }
+
+        public User? GetByEmail(string email)
         {
             var data = _dbContext.Users
                .ToList()

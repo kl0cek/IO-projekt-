@@ -19,6 +19,7 @@ namespace WebAPI.Controllers
         public IActionResult GetAll() 
         {
             var data = _movieService.GetAllMovies();
+            if (data == null) { return NotFound(); }
             return Ok(data);
         }
         [HttpGet("{id}")]

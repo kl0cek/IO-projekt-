@@ -1,0 +1,5 @@
+{
+  "Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\IOprojekt\\API\\Application",
+  "Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\IOprojekt\\API\\Domain",
+  "Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\IOprojekt\\API\\Infrastructure"
+}

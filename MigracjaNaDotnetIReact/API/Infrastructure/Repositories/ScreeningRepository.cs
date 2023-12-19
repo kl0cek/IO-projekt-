@@ -36,5 +36,10 @@ namespace Infrastructure.Repositories
                 .ToList()
                 .SingleOrDefault(s => s.ID == id);
         }
+
+        public IEnumerable<uint> GetReservedSeats(uint id) 
+        {
+            return _dbContext.ReservedSeats.Where(rs => rs.ScreeningID == id).Select(rs => rs.SeatID).ToList();
+        }
     }
 }

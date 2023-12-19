@@ -10,5 +10,6 @@ namespace Domain.Interfaces
     public interface IReservationRepository
     {
         Reservation Add(Reservation reservation);
+        bool Delete(uint  id);
     }
 }

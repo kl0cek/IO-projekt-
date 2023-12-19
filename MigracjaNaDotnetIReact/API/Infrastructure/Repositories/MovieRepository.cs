@@ -39,14 +39,5 @@ namespace Infrastructure.Repositories
             _dbContext.SaveChanges();
             return movie;
         }
-        public Movie Update(Movie movie)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

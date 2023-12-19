@@ -10,6 +10,6 @@ namespace Application.Interfaces
     public interface IScreeningService
     {
         public IEnumerable<ScreeningDetailsDto> GetAllScreenings();
-        public ScreeningDetailsDto GetScreeningDetails(uint id);
+        public ScreeningDetailsDto? GetScreeningDetails(uint id);
     }
 }

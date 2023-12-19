@@ -25,5 +25,18 @@ namespace Infrastructure.Repositories
             _dbContext.SaveChanges();
             return reservation;
         }
+
+        public bool Delete(uint id)
+        {
+            var reservation = _dbContext.Reservations.Where(r => r.ID == id).FirstOrDefault();
+
+            if (reservation != null)
+            {
+                _dbContext.Remove(reservation);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

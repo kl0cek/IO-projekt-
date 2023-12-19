@@ -11,5 +11,6 @@ namespace Domain.Interfaces
     {
         IEnumerable<ReservationHistory>? GetByUserID(uint userID);
         ReservationHistory Add(ReservationHistory reservationHistory);
+        bool Delete(uint id);
     }
 }

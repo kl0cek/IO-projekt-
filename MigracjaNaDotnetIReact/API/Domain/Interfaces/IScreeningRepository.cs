@@ -11,5 +11,6 @@ namespace Domain.Interfaces
     {
         IEnumerable<Screening> GetAll();
         Screening? GetById(uint id);
+        IEnumerable<uint> GetReservedSeats(uint id);
     }
 }

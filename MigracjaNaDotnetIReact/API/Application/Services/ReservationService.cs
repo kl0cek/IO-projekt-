@@ -29,5 +29,10 @@ namespace Application.Services
             _mapper.Map<List<ReservedSeat>>(dto.ReservedSeats);
             return _repository.Add(reservation);
         }
+
+        public bool DeleteReservation(uint id)
+        {
+            return _repository.Delete(id);
+        }
     }
 }

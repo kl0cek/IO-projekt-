@@ -15,7 +15,6 @@ namespace Application.Dto.Get
         public uint Row { get; set; }
         public uint Number { get; set; }
         public bool IsTaken { get; set; } = false;
-        public bool IsUserSelected { get; set; } = false;
 
         public void Mapping(Profile profile)
         {

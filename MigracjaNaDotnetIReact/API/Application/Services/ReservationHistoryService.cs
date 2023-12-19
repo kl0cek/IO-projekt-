@@ -33,6 +33,11 @@ namespace Application.Services
             return _repository.Add(reservationHistory);
         }
 
+        public bool DeleteReservation(uint id)
+        {
+            return _repository.Delete(id);
+        }
+
         public IEnumerable<ReservationHistoryDto>? GetUserReservationHistory(uint userID)
         {
             var data = _repository.GetByUserID(userID);

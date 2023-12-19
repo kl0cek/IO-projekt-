@@ -27,10 +27,32 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<ScreeningDetailsDto>>(data);
         }
 
-        public ScreeningDetailsDto GetScreeningDetails(uint id)
+        public ScreeningDetailsDto? GetScreeningDetails(uint id)
         {
+            var reservedSeats = _repository.GetReservedSeats(id);
             var data = _repository.GetById(id);
-            return _mapper.Map<ScreeningDetailsDto>(data);
+
+            if (data == null)
+            {
+                return null;
+            }
+
+            var screeningDetails = _mapper.Map<ScreeningDetailsDto>(data);
+            if (screeningDetails.Seats != null)
+            {
+                screeningDetails.Seats.ForEach(seat =>
+                {
+                    if (reservedSeats.Contains(seat.ID))
+                    {
+                        seat.IsTaken = true;
+                    }
+                    else
+                    {
+                        seat.IsTaken = false;
+                    }
+                });
+            }
+            return screeningDetails;
         }
     }
 }

@@ -12,5 +12,6 @@ namespace Application.Interfaces
     public interface IReservationService
     {
         Reservation CreateReservation(CreateReservationDto dto);
+        bool DeleteReservation(uint id);
     }
 }

@@ -22,5 +22,18 @@ namespace WebAPI.Controllers
             var data = _reservationService.CreateReservation(dto);
             return Created($"api/[controller]/{data.ID}", data);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(uint id) 
+        {
+            var isDeleted = _reservationService.DeleteReservation(id);
+
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
     }
 }

@@ -53,6 +53,8 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("*");
+                          policy.AllowAnyMethod();
+                          policy.AllowAnyHeader();
                       });
 });
 
@@ -78,3 +80,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
