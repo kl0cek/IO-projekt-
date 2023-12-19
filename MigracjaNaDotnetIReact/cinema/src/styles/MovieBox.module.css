@@ -1,0 +1,13 @@
+#container {
+    width: 100%;
+    background-color: red;
+}
+
+.datesBox {
+    display: flex;
+    justify-content: flex-start;
+}
+
+h2 {
+    font-weight: 200;
+}

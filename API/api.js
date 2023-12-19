@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
 var router = express.Router();
-const fs = require('fs');
+let fs = require('fs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -13,7 +13,6 @@ app.use(cors({origin: '*'}));
 app.use('/api', router);
 
 router.use((request, response, next) => {
-    console.log('middleware');
     next();
 });
 
@@ -22,11 +21,10 @@ router.route('/movies').get(async (request, response) => {
   try {
     let pool = await sql.connect(config);
     let data = await pool.request().execute('GetMovies');
-    response.status(200);
-    response.json(data.recordset);
+    response.status(200).json(data.recordset);
   } catch (error) {
-    response.status(500).json(error);
-    fs.appendFile('log.txt', error.message);
+    fs.appendFile('log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    response.status(500).json({message: "Could not get movies list from database. Contact your server administrator"});
   }
 })
 
@@ -39,9 +37,15 @@ router.route('/movies/:id').get(async (request, response) => {
 
 //Get movie screening
 router.route('/screening/:id').get(async (request, response) => {
-  let pool = await sql.connect(config);
-  let data = await pool.request().input('movieID', request.params['id']).execute('GetMovieScreening');
-  response.json(data.recordset);
+  try {
+    let pool = await sql.connect(config);
+    let data = await pool.request().input('movieID', request.params['id']).execute('GetMovieScreening');
+    response.status(200).json(data.recordset);
+  } catch (error) {
+    fs.appendFile('log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    response.status(500).json({message: "Could not get screening list from database. Contact your server administrator"});
+    
+  }
 })
 
 router.route('/test/:id').get(async (request, response) => {
@@ -51,20 +55,33 @@ router.route('/test/:id').get(async (request, response) => {
   console.log(data);
 })
 
-//
-
-router.route('/screenings').post(async (request, response) => {
-  let body = request.body;
-  console.log(body)
-  let pool = await sql.connect(config);
-  let data = await pool.request().input('UserID', body.UserID).input('Paid', body.Paid).input('Active', body.Active).execute('CreateReservation');
-  response.json({status: "OK"});
+//Post new reservation
+router.route('/reservation').post(async (request, response) => {
+  try {
+    let body = request.body;
+    let pool = await sql.connect(config);
+    let data = await pool.request().input('UserID', body.UserID).input('Paid', body.Paid).input('Active', body.Active).execute('CreateReservation');
+    response.json({message: "Reservation added succesfully"});
+  }
+  catch (error) {
+    fs.appendFile('log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    response.status(500).json({message: "Could not post reservation to database. Contact your server administrator"});
+  }
+  
 })
 
+//Delete movie
 router.route('/movies/:id').delete(async (request, response) => {
-  let pool = await sql.connect(config);
-  let data = await pool.request().input('MovieID', request.params['id']).execute('DeleteMovie');
-  response.json({status: "OK"});
+  try {
+    let pool = await sql.connect(config);
+    let data = await pool.request().input('MovieID', request.params['id']).execute('DeleteMovie');
+    response.json({message: "Movie deleted succesfull"});
+  }
+  catch (err) {
+    fs.appendFile('log.txt', `[${Date.now()}]: ${error.originalError.message}`, (err) => {if (err) {console.log(err)}});
+    response.status(500).json({message: "Could not get delete movie from database. Contact your server administrator"});
+  }
+  
 })
 
 
