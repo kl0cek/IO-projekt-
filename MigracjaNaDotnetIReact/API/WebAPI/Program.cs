@@ -9,27 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using WebAPI.Installers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IMovieService, MovieService>();
-
-builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
-builder.Services.AddScoped<IScreeningService, ScreeningService>();
-
-builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
-builder.Services.AddScoped<ITicketTypeService, TicketTypeService>();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IReservationService, ReservationService>();
-builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-
-builder.Services.AddScoped<IReservationHistoryRepository, ReservationHistoryRepository>();
-builder.Services.AddScoped<IReservationHistoryService, ReservationHistoryService>();
+IBuilder servicesBuilder = new ServicesBuilder();
+servicesBuilder.Build(builder.Services);
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
