@@ -1,0 +1,67 @@
+Przeglądaj repertuar:
+1. Wyślij zapytanie do api o listę filmów
+2. Sprawdź status zapytania
+3. Parsuj dane do typu JSON jeśli status pomyślny
+4. Wyswietl dane
+
+1. Wyślij zapytanie do api o listę filmów
+2. Sprawdź status zapytania
+3. Wyświetl odpowiedni komunikat, jeśli status błędny
+
+
+Kup bilet:
+1. Prześlij zmienną z podsumowanie do podstrony
+2. Wyświetl podsumowanie
+3. Poczekaj na akcję użytkownika
+4. Jeśli kliknięte "Zapłać" dodaj rekordy do bazy danych
+
+1. Prześlij zmienną z podsumowanie do podstrony
+2. Wyświetl podsumowanie
+3. Poczekaj na akcję użytkownika
+4. Jeśli kliknięte "Wróć" przekieruj do poprzedniej strony
+
+
+Zaloguj się:
+1. Wyświetl formularz do wypełnienia
+2. Poczekaj na dane od użytkownika
+3. Sprawdź poprawność danych
+4. Wyślij zapytanie do API o dane użytkownika, jeśli dane poprawne
+5. Ustaw cookies i zaloguj użytkownika
+
+1. Wyświetl formularz do wypełnienia
+2. Poczekaj na dane od użytkownika
+3. Sprawdź poprawność danych
+4. Wyświetl odpowiedni błąd, jeśli dane błędne
+
+
+Wybierz miejsca:
+1. Wyślij zapytanie do bazy danych o układ sali
+2. Sprawdź status zapytania
+3. Jeśli status pomyślny, wyświetl układ sali
+4. Poczekaj na akcję użytkownika
+5. Dodaj do zmiennej wybrane miejsca i ich typy
+
+1. Wyślij zapytanie do bazy danych o układ sali
+2. Sprawdź status zapytania
+3. Jeśli status pomyślny, wyświetl odpowiedni błąd
+
+
+Przeglądaj swoje bilety:
+1. Sprawdź czy użytkownik jest zalogowany
+2. Wyślij zapytanie do API, jeśli jest zalogowany
+3. Poczekaj na dane
+4. Wyświetl pobrane dane
+
+1. Sprawdź czy użytkownik jest zalogowany
+2. Wyświetl odpowiedni błąd jeśli nie jest zalogowany
+
+
+Zwróć bilet
+1. Wybierz bilet do usunięcia
+2. Sprawdź datę seansu
+3. Jeśli różnica między datą seansu a datą usunięcia jest większa niż 3 dni to wyślij zapytanie do API o usunięcie biletu
+4. Przefiltruj listę z biletami
+
+1. Wybierz bilet do usunięcia
+2. Sprawdź datę seansu
+3. Jeśli różnica między datą seansu a datą usunięcia jest mniejsza niż 3 dni to wyświetl odpowiedni błąd
